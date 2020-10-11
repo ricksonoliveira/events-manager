@@ -14,6 +14,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('api')->group(function () {
+
+    Route::prefix('events')->group(function() {
+        //Events CRUD
+    });
+
+    Route::prefix('organizers')->group(function() {
+        //Users Organizers CRUD
+        Route::get('list', 'App\Http\Controllers\OrganizersController@list');
+        Route::post('save', 'App\Http\Controllers\OrganizersController@store');
+        Route::get('view/{organizer_id}', 'App\Http\Controllers\OrganizersController@retrieve');
+        Route::put('update/{organizer_id}', 'App\Http\Controllers\OrganizersController@update');
+        Route::delete('delete/{organizer_id}', 'App\Http\Controllers\OrganizersController@delete');
+    });
 });

@@ -37,7 +37,7 @@ class Events extends Model
     public $timestamps = true;
 
     /**
-     * Get Organizer for this Event
+     * Get Organizers for this Event
      *
      * @return HasMany
      */
