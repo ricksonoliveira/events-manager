@@ -18,6 +18,11 @@ Route::middleware('api')->group(function () {
 
     Route::prefix('events')->group(function() {
         //Events CRUD
+        Route::get('list', 'App\Http\Controllers\EventsController@list');
+        Route::post('save', 'App\Http\Controllers\EventsController@store');
+        Route::get('view/{event_id}', 'App\Http\Controllers\EventsController@retrieve');
+        Route::put('update/{event_id}', 'App\Http\Controllers\EventsController@update');
+        Route::delete('delete/{event_id}', 'App\Http\Controllers\EventsController@delete');
     });
 
     Route::prefix('organizers')->group(function() {

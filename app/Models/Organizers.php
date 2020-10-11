@@ -26,7 +26,6 @@ class Organizers extends Model
      */
     protected $fillable = [
         'user_id',
-        'event_id'
     ];
 
     /**
@@ -34,7 +33,7 @@ class Organizers extends Model
      *
      * @var bool
      */
-    public $timestamps = false;
+    public $timestamps = true;
 
     /**
      * Get Organizers for this Organizers
@@ -44,16 +43,6 @@ class Organizers extends Model
     public function user()
     {
         return $this->hasOne(User::class, 'id', 'user_id');
-    }
-
-    /**
-     * Get Event for this Organizers
-     *
-     * @return HasOne
-     */
-    public function event()
-    {
-        return $this->hasOne(Events::class, 'id', 'event_id');
     }
 
     /**
@@ -80,16 +69,13 @@ class Organizers extends Model
         $existsEmail = User::where('email', $email)->first();
         if($existsEmail) {
             throw new \Exception(__('common.email_unique'));
-        } else  {
-
-            $this->user()->create([
-                'name' => $name,
-                'email' => $email,
-                'password' => $password
-            ]);
         }
 
-        return $this->user;
+        return User::create([
+            'name' => $name,
+            'email' => $email,
+            'password' => $password
+        ]);
     }
 
     /**
@@ -122,14 +108,12 @@ class Organizers extends Model
      * Create Organizer
      *
      * @param int $user_id
-     * @param int $event_id
      * @return Model
      */
-    public function createOrganizer(int $user_id, int $event_id): Model
+    public function createOrganizer(int $user_id): Model
     {
         $this->fill([
-            'event_id' => $event_id,
-            'user_id' => $user_id
+            'user_id' => $user_id,
         ]);
         $this->save();
         return $this;

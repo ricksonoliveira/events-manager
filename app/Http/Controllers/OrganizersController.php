@@ -43,7 +43,6 @@ class OrganizersController extends Controller
      */
     public function store(Request $request)
     {
-        $event_id = $request->get('event_id', null);
         $name = $request->get('name', '');
         $email = $request->get('email', '');
         $password = $request->get('password', '');
@@ -59,7 +58,7 @@ class OrganizersController extends Controller
                 $password
             );
 
-            $model->createOrganizer($user->id, $event_id);
+            $model->createOrganizer($user->id);
             $model->setRelation('user', $model->user);
 
             DB::commit();
@@ -88,7 +87,10 @@ class OrganizersController extends Controller
     public function retrieve($organizer_id)
     {
         try {
-            $model = Organizers::findOrFail($organizer_id);
+            $model = Organizers::find($organizer_id);
+            if(!$model) {
+                throw new \Exception(__('common.not_found'));
+            }
             $model->setRelation('user', $model->user);
 
             return response()->json([
