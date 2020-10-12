@@ -24,7 +24,7 @@ class OrganizersEvent extends Model
      */
     protected $fillable = [
         'event_id',
-        'organizer',
+        'organizer_id',
     ];
 
     /**
@@ -41,6 +41,31 @@ class OrganizersEvent extends Model
      */
     public function event()
     {
-        return $this->hasOne(User::class, 'id', 'user_id');
+        return $this->hasOne(Events::class, 'id', 'event_id');
+    }
+
+    /**
+     * Get the Organizer for this OrganizersEvent
+     *
+     * @return HasOne
+     */
+    public function organizer()
+    {
+        return $this->hasOne(Organizers::class, 'id', 'organizer_id');
+    }
+
+    public static function storeOrganizers(array $organizers, $event_id)
+    {
+        $collection = collect($organizers);
+
+        $collection->map(function ($organizer_id) use ($event_id) {
+            return OrganizersEvent::firstOrCreate([
+                'organizer_id' => $organizer_id,
+                'event_id' => $event_id
+            ], [
+                'organizer_id' => $organizer_id,
+                'event_id' => $event_id
+            ]);
+        });
     }
 }

@@ -9,6 +9,10 @@ use App\Http\Resources\Organizers as OrganizerCollection;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Class OrganizersController
+ * @package App\Http\Controllers
+ */
 class OrganizersController extends Controller
 {
 

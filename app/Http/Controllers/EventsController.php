@@ -3,12 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Events;
+use App\Models\OrganizersEvent;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use \App\Http\Resources\Events as EventsCollection;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Class EventsController
+ * @package App\Http\Controllers
+ */
 class EventsController extends Controller
 {
     /**
@@ -21,7 +26,7 @@ class EventsController extends Controller
     {
         try {
 
-            $query = Events::with('organizers.user');
+            $query = Events::with('organizers.organizer.user');
 
             return EventsCollection::collection($query->paginate(10));
 
@@ -85,7 +90,7 @@ class EventsController extends Controller
             if(!$model) {
                 throw new \Exception(__('common.not_found'));
             }
-            $model->setRelation('organizers', $model->organizers);
+            $model->setRelation('organizers', $model->organizers()->with('organizer.user')->get());
 
             return response()->json([
                 'message' => __('common.found'),
@@ -159,6 +164,34 @@ class EventsController extends Controller
 
             return response()->json([
                 'message' => __('common.deleted')
+            ], 200);
+
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 400);
+        }
+    }
+
+    /**
+     * Bind Organizers to an Event
+     *
+     * @param Request $request
+     * @param $event_id
+     * @return JsonResponse
+     */
+    public function bindOrganizers(Request $request, $event_id)
+    {
+        try {
+            $model = Events::findOrFail($event_id);
+            OrganizersEvent::storeOrganizers($request->organizers, $event_id);
+
+            $model->setRelation('organizers', $model->organizers()->with('organizer.user')->get());
+
+            return response()->json([
+                'message' => 'Organizers added!',
+                'data' => $model
             ], 200);
 
         } catch (\Exception $e) {

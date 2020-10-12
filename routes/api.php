@@ -23,6 +23,7 @@ Route::middleware('api')->group(function () {
         Route::get('view/{event_id}', 'App\Http\Controllers\EventsController@retrieve');
         Route::put('update/{event_id}', 'App\Http\Controllers\EventsController@update');
         Route::delete('delete/{event_id}', 'App\Http\Controllers\EventsController@delete');
+        Route::post('bind/organizers/event/{event_id}', 'App\Http\Controllers\EventsController@bindOrganizers');
     });
 
     Route::prefix('organizers')->group(function() {
