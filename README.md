@@ -3,7 +3,7 @@ Manage, Create and Schedule Events. A PHP Laravel back-end challenge.
 
 # CRUD Endpoints:
 ## Events Routes:
-`/api/events{list/ save/ view/ update/ delete/}/{event_id}`
+`/api/events/ {list/ save/ view/ update/ delete/}/{event_id}`
 
 ## Organizers Routes:
 `/api/organizers/ {list/ save/ view/ update/ delete/}/{organizer_id}`
